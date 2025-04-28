@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Data
 public class Logement {
@@ -13,7 +15,13 @@ public class Logement {
     private Long id;
 
     private String title;
-    private String address;
+    private String description;
+
+
+    @Embedded
+    private Address address;
+
+
 
     @Enumerated(EnumType.STRING)
     private LogementType type;
@@ -22,8 +30,20 @@ public class Logement {
     private Integer nombreOfChambres;
     private Double pricePerNight;
 
+
+//    @ManyToMany
+//    @JoinTable(
+//            name = "logement_equipements",
+//            joinColumns = @JoinColumn(name = "logement_id"),
+//            inverseJoinColumns = @JoinColumn(name = "equipement_id")
+//    )
+    //private List<Equipement> equipements;
+    private List<String> equipement;
+
+
+
     @ManyToOne
-    @JoinColumn(name = "proprietaire_id")
+    @JoinColumn(name = "commercial_id")
     @JsonBackReference
-    private Proprietaire proprietaire;
+    private Employe employe;
 }

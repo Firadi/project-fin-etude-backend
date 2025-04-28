@@ -1,5 +1,6 @@
 package com.project_technique.project_technique.controllers;
 
+import com.project_technique.project_technique.dto.LogementRequestDTO;
 import com.project_technique.project_technique.models.Logement;
 import com.project_technique.project_technique.services.LogementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,9 @@ public class LogementController {
     }
 
     @PostMapping
-    public Logement createLogement(@RequestBody Logement logement){
-        return logementService.createLogement(logement);
+    public ResponseEntity<Logement> createLogement(@RequestBody LogementRequestDTO dto){
+        Logement createdLogement = logementService.createLogement(dto);
+        return ResponseEntity.ok(createdLogement);
     }
 
 
