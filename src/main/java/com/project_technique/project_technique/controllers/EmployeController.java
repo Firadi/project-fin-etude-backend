@@ -2,6 +2,7 @@ package com.project_technique.project_technique.controllers;
 
 import com.project_technique.project_technique.dto.EmployeRequestDTO;
 import com.project_technique.project_technique.models.Employe;
+import com.project_technique.project_technique.models.RoleEmploye;
 import com.project_technique.project_technique.repositories.EmployeRepo;
 import com.project_technique.project_technique.services.EmployeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,10 @@ public class EmployeController {
 
     @PostMapping
     public ResponseEntity<Employe> createEmploye(@RequestBody EmployeRequestDTO dto) {
+        if (dto.getRole() == RoleEmploye.DIRECTEUR) {
+            throw new IllegalArgumentException("Cannot create a Directeur using this endpoint. Please use /api/agences/with-directeur instead.");
+        }
+
         return ResponseEntity
                 .status( HttpStatus.CREATED )
                 .body(employeService.createEmploye(dto));

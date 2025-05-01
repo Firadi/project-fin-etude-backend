@@ -1,4 +1,4 @@
-package com.project_technique.project_technique.models;
+package com.project_technique.project_technique.models.logement;
 
 public enum LogementType {
     Maison,

@@ -1,7 +1,8 @@
 package com.project_technique.project_technique.controllers;
 
 import com.project_technique.project_technique.dto.LogementRequestDTO;
-import com.project_technique.project_technique.models.Logement;
+import com.project_technique.project_technique.dto.LogementResponseDTO;
+import com.project_technique.project_technique.models.logement.Logement;
 import com.project_technique.project_technique.services.LogementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class LogementController {
     LogementService logementService;
 
     @GetMapping
-    public ResponseEntity<List<Logement>> getLogements(){
+    public ResponseEntity<List<LogementResponseDTO>> getLogements(){
 
         List<Logement> list = new ArrayList<>();
         Logement l = new Logement();

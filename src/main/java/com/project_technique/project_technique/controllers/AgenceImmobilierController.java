@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/agences")
-public class AgenceImmoubilerController {
+public class AgenceImmobilierController {
     @Autowired
     private AgenceImmobilierService agenceImmobilierService;
 

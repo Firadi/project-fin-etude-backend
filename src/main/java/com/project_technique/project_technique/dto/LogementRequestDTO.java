@@ -1,7 +1,7 @@
 package com.project_technique.project_technique.dto;
 
 import com.project_technique.project_technique.models.Address;
-import com.project_technique.project_technique.models.LogementType;
+import com.project_technique.project_technique.models.logement.LogementType;
 import lombok.Data;
 
 import java.util.List;
@@ -18,4 +18,5 @@ public class LogementRequestDTO {
     private Long employeId; // propriétaire
     //private List<Long> equipementIds;
     private List<String> equipement;
+    private List<String> imagesBase64;
 }

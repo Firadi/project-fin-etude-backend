@@ -1,4 +1,4 @@
-package com.project_technique.project_technique.models;
+package com.project_technique.project_technique.models.logement;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
