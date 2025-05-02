@@ -6,6 +6,7 @@ import com.project_technique.project_technique.models.Employe;
 import com.project_technique.project_technique.repositories.AgenceImmoubilerRepo;
 import com.project_technique.project_technique.repositories.EmployeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public class EmployeService {
     @Autowired
     private AgenceImmoubilerRepo agenceImmoubilerRepo;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<Employe> getAllEmployes() {
         return employeRepository.findAll();
@@ -31,6 +34,8 @@ public class EmployeService {
 
     public Employe createEmploye(EmployeRequestDTO dto) {
 
+        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+
         AgenceImmobilier agence = agenceImmoubilerRepo.findById(dto.getAgenceId())
                 .orElseThrow(() -> new RuntimeException("Agence not found"));
 
@@ -38,7 +43,7 @@ public class EmployeService {
         Employe employe = new Employe();
         employe.setName(dto.getName());
         employe.setEmail(dto.getEmail());
-        employe.setPassword(dto.getPassword());
+        employe.setPassword(encodedPassword);
         employe.setRole(dto.getRole());
         employe.setAgence(agence);
 
