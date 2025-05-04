@@ -1,6 +1,7 @@
 package com.project_technique.project_technique.services;
 
 import com.project_technique.project_technique.dto.CreateAgenceWithDirecteurRequestDTO;
+import com.project_technique.project_technique.dto.EmployeRequestDTO;
 import com.project_technique.project_technique.models.AgenceImmobilier;
 import com.project_technique.project_technique.models.Employe;
 import com.project_technique.project_technique.models.RoleEmploye;
@@ -19,7 +20,7 @@ public class AgenceImmobilierService {
     private AgenceImmoubilerRepo agenceImmoubilerRepo;
 
     @Autowired
-    private EmployeRepo employeRepo;
+    private EmployeService employeService;
 
     public List<AgenceImmobilier> getAllAgences() {
         return agenceImmoubilerRepo.findAll();
@@ -43,16 +44,18 @@ public class AgenceImmobilierService {
         agence = agenceImmoubilerRepo.save(agence);
 
         // Step 2: Create the Directeur (Employe)
-        Employe directeur = new Employe();
+
+        EmployeRequestDTO directeur = new EmployeRequestDTO();
         directeur.setName(request.getDirecteurName());
         directeur.setEmail(request.getDirecteurEmail());
         directeur.setPassword(request.getDirecteurPassword());
         directeur.setRole(RoleEmploye.DIRECTEUR);
-        directeur.setAgence(agence);
-        directeur = employeRepo.save(directeur);
+        directeur.setAgenceId(agence.getId());
+
+        Employe dir = employeService.createEmploye(directeur);
 
         // Step 3: Update Agence with Directeur
-        agence.setDirecteur(directeur);
+        agence.setDirecteur(dir);
         agence = agenceImmoubilerRepo.save(agence);
 
         return agence;
