@@ -1,5 +1,6 @@
 package com.project_technique.project_technique.config;
 
+import com.project_technique.project_technique.filter.JwtRequestFilter;
 import com.project_technique.project_technique.security.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,28 +15,36 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
+        @Autowired
+        private CustomUserDetailsService userDetailsService;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**").permitAll()
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
-                        //.anyRequest().authenticated()
-                )
-                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        @Autowired
+        private JwtRequestFilter jwtRequestFilter;
 
-        return http.build();
-    }
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+            http
+                    .csrf(csrf -> csrf.disable())
+                    .authorizeHttpRequests(auth -> auth
+                            //.requestMatchers("/**").permitAll()
+                            .requestMatchers("/api/auth/**").permitAll()
+                            .requestMatchers("/swagger-ui/**").permitAll()
+                            .anyRequest().authenticated()
+                    )
+                    .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                    .authenticationProvider(daoAuthenticationProvider())
+                    .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                    ;
+
+
+            return http.build();
+        }
 
 
     @Bean

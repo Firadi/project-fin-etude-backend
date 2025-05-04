@@ -35,6 +35,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         String jwt = null;
 
+        System.out.println("JWT Filter is running...");
+
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
             username = jwtUtil.extractUsername(jwt);
