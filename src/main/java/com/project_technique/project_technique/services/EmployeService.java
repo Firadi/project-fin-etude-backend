@@ -3,6 +3,7 @@ package com.project_technique.project_technique.services;
 import com.project_technique.project_technique.dto.EmployeRequestDTO;
 import com.project_technique.project_technique.models.AgenceImmobilier;
 import com.project_technique.project_technique.models.Employe;
+import com.project_technique.project_technique.models.RoleEmploye;
 import com.project_technique.project_technique.repositories.AgenceImmoubilerRepo;
 import com.project_technique.project_technique.repositories.EmployeRepo;
 import com.project_technique.project_technique.repositories.UserRepo;
@@ -17,7 +18,7 @@ import java.util.Optional;
 public class EmployeService {
 
     @Autowired
-    private EmployeRepo employeRepository;
+    private EmployeRepo employeRepo;
 
     @Autowired
     private UserRepo userRepo;
@@ -29,11 +30,11 @@ public class EmployeService {
     private PasswordEncoder passwordEncoder;
 
     public List<Employe> getAllEmployes() {
-        return employeRepository.findAll();
+        return employeRepo.findAll();
     }
 
     public Optional<Employe> getEmployeById(Long id) {
-        return employeRepository.findById(id);
+        return employeRepo.findById(id);
     }
 
     public Employe createEmploye(EmployeRequestDTO dto) {
@@ -52,30 +53,34 @@ public class EmployeService {
 
 
         // Save
-        return employeRepository.save(employe);
+        return employeRepo.save(employe);
     }
 
     public Employe updateEmploye(Long id, Employe updatedEmploye) {
-        return employeRepository.findById(id)
+        return employeRepo.findById(id)
                 .map(employe -> {
                     employe.setRole(updatedEmploye.getRole());
                     employe.setAgence(updatedEmploye.getAgence());
                     employe.setLogements(updatedEmploye.getLogements());
-                    return employeRepository.save(employe);
+                    return employeRepo.save(employe);
                 })
                 .orElseGet(() -> {
                     updatedEmploye.setId(id);
-                    return employeRepository.save(updatedEmploye);
+                    return employeRepo.save(updatedEmploye);
                 });
     }
 
     public void deleteEmploye(Long id) {
-        employeRepository.deleteById(id);
+        employeRepo.deleteById(id);
     }
 
     public Employe findByEmail(String email) {
 
-        return employeRepository.findByEmail(email)
-                .orElse(null);
+        return employeRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Employé non trouvé"));
+    }
+
+    public List<Employe> findByAgenceAndRole(AgenceImmobilier agenceImmobilier, RoleEmploye roleEmploye) {
+        return employeRepo.findByAgenceAndRole(agenceImmobilier, roleEmploye);
     }
 }

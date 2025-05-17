@@ -1,6 +1,7 @@
 package com.project_technique.project_technique.controllers;
 
 import com.project_technique.project_technique.dto.EmployeRequestDTO;
+import com.project_technique.project_technique.models.AgenceImmobilier;
 import com.project_technique.project_technique.models.Employe;
 import com.project_technique.project_technique.models.RoleEmploye;
 import com.project_technique.project_technique.repositories.EmployeRepo;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +31,23 @@ public class EmployeController {
     @GetMapping("/{id}")
     public Optional<Employe> getEmployeById(@PathVariable Long id) {
         return employeService.getEmployeById(id);
+    }
+
+    @GetMapping("/commercials")
+    public ResponseEntity<List<Employe>> getCommercialsByAgence(Authentication authentication){
+        String email = authentication.getName();
+
+        Employe directeur = employeService.findByEmail(email);
+
+        if (RoleEmploye.DIRECTEUR != directeur.getRole()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        AgenceImmobilier agenceImmobilier = directeur.getAgence();
+
+        List<Employe> commerciaux = employeService.findByAgenceAndRole(agenceImmobilier, RoleEmploye.COMMERCIAL);
+
+        return ResponseEntity.ok(commerciaux);
     }
 
     @PostMapping
