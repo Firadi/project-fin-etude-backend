@@ -54,4 +54,38 @@ public class LogementResponseDTO {
         }
 
     }
+
+    public static LogementResponseDTO toDTO(Logement logement) {
+
+        LogementResponseDTO logementResponseDTO = new LogementResponseDTO();
+
+
+        logementResponseDTO.setId(logement.getId());
+        logementResponseDTO.setTitle(logement.getTitle());
+        logementResponseDTO.setDescription(logement.getDescription());
+        logementResponseDTO.setAddress(logement.getAddress());
+        logementResponseDTO.setType(logement.getType());
+        logementResponseDTO.setCapacity(logement.getCapacity());
+        logementResponseDTO.setNombreOfChambres(logement.getNombreOfChambres());
+        logementResponseDTO.setPricePerNight(logement.getPricePerNight());
+
+        if (logement.getEmploye() != null) {
+            logementResponseDTO.setEmployeId(logement.getEmploye().getId());
+        }
+
+        if (logement.getEquipement() != null) {
+
+            logementResponseDTO.setEquipement(logement.getEquipement());
+        }
+
+        if (logement.getImages() != null) {
+            List<String> base64Images = logement.getImages().stream()
+                    .map(
+                            image -> Base64.getEncoder()
+                                    .encodeToString(image.getData()))
+                    .collect(Collectors.toList());
+            logementResponseDTO.setImagesBase64(base64Images);
+        }
+        return logementResponseDTO;
+    }
 }

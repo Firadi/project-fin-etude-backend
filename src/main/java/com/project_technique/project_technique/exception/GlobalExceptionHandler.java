@@ -13,24 +13,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 
 @Hidden
-@ControllerAdvice(basePackages = "com.projecttechnique") // Adapte selon ton package
+@ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<String> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
-        Throwable rootCause = getRootCause(ex);
-        if (rootCause instanceof PSQLException) {
-            String message = rootCause.getMessage();
-            if (message != null && message.contains("users_email_key")) {
-                return ResponseEntity
-                        .status(HttpStatus.CONFLICT)
-                        .body("Cet email existe déjà. Veuillez en utiliser un autre.");
-            }
-        }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleDuplicateEmail(IllegalArgumentException ex) {
 
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body("Erreur d'intégrité des données.");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("error:  "+ex.getMessage());
     }
 
     // Optional: utility method to unwrap the root cause

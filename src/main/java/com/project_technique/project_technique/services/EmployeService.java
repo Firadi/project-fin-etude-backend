@@ -5,6 +5,7 @@ import com.project_technique.project_technique.models.AgenceImmobilier;
 import com.project_technique.project_technique.models.Employe;
 import com.project_technique.project_technique.repositories.AgenceImmoubilerRepo;
 import com.project_technique.project_technique.repositories.EmployeRepo;
+import com.project_technique.project_technique.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class EmployeService {
 
     @Autowired
     private EmployeRepo employeRepository;
+
+    @Autowired
+    private UserRepo userRepo;
 
     @Autowired
     private AgenceImmoubilerRepo agenceImmoubilerRepo;
@@ -34,19 +38,18 @@ public class EmployeService {
 
     public Employe createEmploye(EmployeRequestDTO dto) {
 
+        if (userRepo.existsByEmail(dto.getEmail())) {
+            throw new IllegalArgumentException("Email already exists.");
+        }
+
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
 
         AgenceImmobilier agence = agenceImmoubilerRepo.findById(dto.getAgenceId())
                 .orElseThrow(() -> new RuntimeException("Agence not found"));
 
         // Create the Employe manually
-        Employe employe = new Employe();
-        employe.setFirstName(dto.getFirstName());
-        employe.setLastName(dto.getLastName());
-        employe.setEmail(dto.getEmail());
-        employe.setPassword(encodedPassword);
-        employe.setRole(dto.getRole());
-        employe.setAgence(agence);
+        Employe employe = dto.toEmploye(encodedPassword, agence);
+
 
         // Save
         return employeRepository.save(employe);

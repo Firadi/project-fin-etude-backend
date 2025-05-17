@@ -80,4 +80,17 @@ public class LogementService {
         });
 
     }
+
+    public List<LogementResponseDTO> findByCommercialEmail(String employeEmail) {
+
+
+        List<Logement> logements = logementRepo.findByEmployeEmail(employeEmail);
+
+
+        return logements
+                        .stream()
+                        .map(LogementResponseDTO::toDTO)
+                        .toList();
+
+    }
 }
