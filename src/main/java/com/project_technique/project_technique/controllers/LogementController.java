@@ -30,6 +30,14 @@ public class LogementController {
         return ResponseEntity.ok(logementService.getAllLogements());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<LogementResponseDTO> getLogementById(@PathVariable Long id){
+
+        return logementService.getLogementById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<Logement> createLogement(@RequestBody LogementRequestDTO dto){
         Logement createdLogement = logementService.createLogement(dto);

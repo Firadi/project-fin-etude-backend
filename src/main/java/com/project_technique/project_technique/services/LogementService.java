@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,5 +70,14 @@ public class LogementService {
                     dto.mapToDTO(logement);
                 return dto;
         }).collect(Collectors.toList());
+    }
+
+    public Optional<LogementResponseDTO> getLogementById(Long id){
+        return logementRepo.findById(id).map(logement -> {
+            LogementResponseDTO dto = new LogementResponseDTO();
+            dto.mapToDTO(logement);
+            return dto;
+        });
+
     }
 }
