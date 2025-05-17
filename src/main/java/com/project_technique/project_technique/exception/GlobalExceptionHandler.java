@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.security.SignatureException;
+
 
 @Hidden
 @ControllerAdvice
@@ -31,5 +33,9 @@ public class GlobalExceptionHandler {
         return cause;
     }
 
-
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<String> handleInvalidJwtSignature(SignatureException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("Invalid token");
+    }
 }
