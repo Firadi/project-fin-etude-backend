@@ -1,5 +1,6 @@
 package com.project_technique.project_technique.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project_technique.project_technique.models.Address;
 import com.project_technique.project_technique.models.logement.LogementType;
 import lombok.Data;
@@ -16,7 +17,9 @@ public class LogementRequestDTO {
     private Integer nombreOfChambres;
     private Double pricePerNight;
     //private List<Long> equipementIds;
-    private Long employeId; // propriétaire
+
+    @JsonIgnore
+    private Long employeId; // commercial
     private List<String> equipement;
     private List<String> imagesBase64;
 }

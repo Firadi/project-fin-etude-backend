@@ -73,4 +73,9 @@ public class EmployeService {
         employeRepository.deleteById(id);
     }
 
+    public Employe findByEmail(String email) {
+
+        return employeRepository.findByEmail(email)
+                .orElse(null);
+    }
 }
