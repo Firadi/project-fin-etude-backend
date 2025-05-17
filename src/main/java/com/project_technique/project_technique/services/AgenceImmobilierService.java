@@ -46,7 +46,8 @@ public class AgenceImmobilierService {
         // Step 2: Create the Directeur (Employe)
 
         EmployeRequestDTO directeur = new EmployeRequestDTO();
-        directeur.setName(request.getDirecteurName());
+        directeur.setFirstName(request.getDirecteurFirstName());
+        directeur.setLastName(request.getDirecteurLastName());
         directeur.setEmail(request.getDirecteurEmail());
         directeur.setPassword(request.getDirecteurPassword());
         directeur.setRole(RoleEmploye.DIRECTEUR);

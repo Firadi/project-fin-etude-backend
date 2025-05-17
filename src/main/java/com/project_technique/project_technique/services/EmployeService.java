@@ -41,7 +41,8 @@ public class EmployeService {
 
         // Create the Employe manually
         Employe employe = new Employe();
-        employe.setName(dto.getName());
+        employe.setFirstName(dto.getFirstName());
+        employe.setLastName(dto.getLastName());
         employe.setEmail(dto.getEmail());
         employe.setPassword(encodedPassword);
         employe.setRole(dto.getRole());

@@ -15,8 +15,8 @@ public class LogementRequestDTO {
     private String description;
     private Integer nombreOfChambres;
     private Double pricePerNight;
-    private Long employeId; // propriétaire
     //private List<Long> equipementIds;
+    private Long employeId; // propriétaire
     private List<String> equipement;
     private List<String> imagesBase64;
 }

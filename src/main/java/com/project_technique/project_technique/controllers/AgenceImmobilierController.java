@@ -3,7 +3,10 @@ package com.project_technique.project_technique.controllers;
 import com.project_technique.project_technique.dto.CreateAgenceWithDirecteurRequestDTO;
 import com.project_technique.project_technique.models.AgenceImmobilier;
 import com.project_technique.project_technique.services.AgenceImmobilierService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,8 +34,11 @@ public class AgenceImmobilierController {
 //    }
 
     @PostMapping
-    public AgenceImmobilier createAgenceWithDirecteur(@RequestBody CreateAgenceWithDirecteurRequestDTO request) {
-        return agenceImmobilierService.createAgenceWithDirecteur(request);
+    public ResponseEntity<AgenceImmobilier> createAgenceWithDirecteur(@RequestBody @Valid  CreateAgenceWithDirecteurRequestDTO request) {
+
+        AgenceImmobilier result = agenceImmobilierService.createAgenceWithDirecteur(request);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @PutMapping("/{id}")

@@ -13,6 +13,10 @@ public class UserService {
 
     public User createUser(User user){
 
+        if (userRepo.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already exists.");
+        }
+
         System.out.println(user);
         return userRepo.save(user);
     }
