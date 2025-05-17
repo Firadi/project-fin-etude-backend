@@ -16,9 +16,6 @@ public class CreateAgenceWithDirecteurRequestDTO {
     @NotBlank(message = "Le numéro de téléphone est requis")
     private String tel;
 
-    @Email(message = "Format d'email invalide")
-    @NotBlank(message = "L'email de l'agence est requis")
-    private String email;
 
     @Schema(example = "Ahmed")
     @NotBlank(message = "Le prénom du directeur est requis")

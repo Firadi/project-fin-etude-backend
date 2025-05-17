@@ -40,7 +40,6 @@ public class AgenceImmobilierService {
         AgenceImmobilier agence = new AgenceImmobilier();
         agence.setNom(request.getNom());
         agence.setTel(request.getTel());
-        agence.setEmail(request.getEmail());
         agence = agenceImmoubilerRepo.save(agence);
 
         // Step 2: Create the Directeur (Employe)
