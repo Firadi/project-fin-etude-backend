@@ -1,17 +1,17 @@
 package com.project_technique.project_technique.exception;
 
 
+import io.jsonwebtoken.security.SignatureException;
 import io.swagger.v3.oas.annotations.Hidden;
 
-import org.postgresql.util.PSQLException;
-import org.springframework.dao.DataIntegrityViolationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.security.SignatureException;
+
 
 
 @Hidden
@@ -35,6 +35,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SignatureException.class)
     public ResponseEntity<String> handleInvalidJwtSignature(SignatureException ex) {
+
+        System.out.println("OKKKKKKKKKKKKKKK");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body("Invalid token");
     }
