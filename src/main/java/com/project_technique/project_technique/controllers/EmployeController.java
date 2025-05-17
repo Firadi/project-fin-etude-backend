@@ -1,11 +1,14 @@
 package com.project_technique.project_technique.controllers;
 
+import com.project_technique.project_technique.annotations.IsDirecteur;
 import com.project_technique.project_technique.dto.EmployeRequestDTO;
 import com.project_technique.project_technique.models.AgenceImmobilier;
 import com.project_technique.project_technique.models.Employe;
 import com.project_technique.project_technique.models.RoleEmploye;
 import com.project_technique.project_technique.repositories.EmployeRepo;
 import com.project_technique.project_technique.services.EmployeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -33,15 +36,15 @@ public class EmployeController {
         return employeService.getEmployeById(id);
     }
 
+    @Operation(summary = "Get all commercials by agence (only for DIRECTEUR)",
+            security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/commercials")
+    @IsDirecteur
     public ResponseEntity<List<Employe>> getCommercialsByAgence(Authentication authentication){
         String email = authentication.getName();
 
         Employe directeur = employeService.findByEmail(email);
 
-        if (RoleEmploye.DIRECTEUR != directeur.getRole()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
 
         AgenceImmobilier agenceImmobilier = directeur.getAgence();
 
