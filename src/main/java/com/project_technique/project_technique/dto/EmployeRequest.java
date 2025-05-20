@@ -10,8 +10,8 @@ public record EmployeRequest(
         String lastName,
         String email,
         String password,
-        RoleEmploye role,
-        Long agenceId
+        RoleEmploye role
+
 ) {
     public Employe toEmploye(String encodedPassword, AgenceImmobilier agence) {
         Employe employe = new Employe();

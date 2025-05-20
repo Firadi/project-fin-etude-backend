@@ -1,5 +1,6 @@
 package com.project_technique.project_technique.services;
 
+import com.project_technique.project_technique.annotations.IsDirecteur;
 import com.project_technique.project_technique.dto.EmployeRequest;
 import com.project_technique.project_technique.exception.EmailAlreadyExistsException;
 import com.project_technique.project_technique.models.AgenceImmobilier;
@@ -30,6 +31,13 @@ public class EmployeService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
+
+
+
+
     public List<Employe> getAllEmployes() {
         return employeRepo.findAll();
     }
@@ -38,17 +46,22 @@ public class EmployeService {
         return employeRepo.findById(id);
     }
 
+
     public Employe createEmploye(EmployeRequest dto) {
 
-        if (userRepo.existsByEmail(dto.getEmail())) {
+        if (userRepo.existsByEmail(dto.email())) {
             throw new EmailAlreadyExistsException("Email already exist");
         }
 
-        AgenceImmobilier agence = agenceImmoubilerRepo.findById(dto.getAgenceId())
-                .orElseThrow(() -> new RuntimeException("Agence not found"));
+        String directeurEmail = jwtUtil.getCurrentUserEmail();
+
+        Employe directeur = employeRepo.findByEmail(directeurEmail)
+                .orElseThrow(() -> new RuntimeException("Directeur not found"));
+
+        AgenceImmobilier agence = directeur.getAgence();
 
 
-        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+        String encodedPassword = passwordEncoder.encode(dto.password());
 
         Employe employe = dto.toEmploye(encodedPassword, agence);
 

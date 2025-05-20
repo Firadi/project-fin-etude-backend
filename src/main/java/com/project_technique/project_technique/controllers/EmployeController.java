@@ -7,6 +7,7 @@ import com.project_technique.project_technique.models.Employe;
 import com.project_technique.project_technique.models.RoleEmploye;
 
 import com.project_technique.project_technique.services.EmployeService;
+import com.project_technique.project_technique.services.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,11 @@ public class EmployeController {
 
     @Autowired
     private EmployeService employeService;
+
+
+
+
+
 
     @GetMapping
     public List<Employe> getAllEmployes() {
@@ -56,9 +62,7 @@ public class EmployeController {
     @PostMapping
     @IsDirecteur
     public ResponseEntity<Employe> createEmploye(@RequestBody EmployeRequest dto) {
-//        if (dto.getRole() == RoleEmploye.DIRECTEUR) {
-//            throw new IllegalArgumentException("Cannot create a Directeur using this endpoint. Please use /api/agences/with-directeur instead.");
-//        }
+
 
 
         return ResponseEntity
