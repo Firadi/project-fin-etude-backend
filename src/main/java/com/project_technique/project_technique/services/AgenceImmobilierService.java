@@ -1,12 +1,11 @@
 package com.project_technique.project_technique.services;
 
-import com.project_technique.project_technique.dto.CreateAgenceWithDirecteurRequestDTO;
-import com.project_technique.project_technique.dto.EmployeRequestDTO;
+import com.project_technique.project_technique.dto.CreateAgenceWithDirecteurRequest;
+import com.project_technique.project_technique.dto.EmployeRequest;
 import com.project_technique.project_technique.models.AgenceImmobilier;
 import com.project_technique.project_technique.models.Employe;
 import com.project_technique.project_technique.models.RoleEmploye;
 import com.project_technique.project_technique.repositories.AgenceImmoubilerRepo;
-import com.project_technique.project_technique.repositories.EmployeRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,22 +34,23 @@ public class AgenceImmobilierService {
     }
 
     @Transactional
-    public AgenceImmobilier createAgenceWithDirecteur(CreateAgenceWithDirecteurRequestDTO request) {
+    public AgenceImmobilier createAgenceWithDirecteur(CreateAgenceWithDirecteurRequest request) {
         // Step 1: Create the Agence
         AgenceImmobilier agence = new AgenceImmobilier();
-        agence.setNom(request.getNom());
-        agence.setTel(request.getTel());
+        agence.setNom(request.nom());
+        agence.setTel(request.tel());
         agence = agenceImmoubilerRepo.save(agence);
 
         // Step 2: Create the Directeur (Employe)
 
-        EmployeRequestDTO directeur = new EmployeRequestDTO();
-        directeur.setFirstName(request.getDirecteurFirstName());
-        directeur.setLastName(request.getDirecteurLastName());
-        directeur.setEmail(request.getDirecteurEmail());
-        directeur.setPassword(request.getDirecteurPassword());
-        directeur.setRole(RoleEmploye.DIRECTEUR);
-        directeur.setAgenceId(agence.getId());
+        EmployeRequest directeur = new EmployeRequest(
+                request.directeurFirstName(),
+                request.directeurLastName(),
+                request.directeurEmail(),
+                request.directeurPassword(),
+                RoleEmploye.DIRECTEUR,
+                agence.getId()
+        );
 
         Employe dir = employeService.createEmploye(directeur);
 

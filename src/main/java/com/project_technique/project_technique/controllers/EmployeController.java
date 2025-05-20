@@ -1,7 +1,7 @@
 package com.project_technique.project_technique.controllers;
 
 import com.project_technique.project_technique.annotations.IsDirecteur;
-import com.project_technique.project_technique.dto.EmployeRequestDTO;
+import com.project_technique.project_technique.dto.EmployeRequest;
 import com.project_technique.project_technique.models.AgenceImmobilier;
 import com.project_technique.project_technique.models.Employe;
 import com.project_technique.project_technique.models.RoleEmploye;
@@ -55,7 +55,7 @@ public class EmployeController {
 
     @PostMapping
     @IsDirecteur
-    public ResponseEntity<Employe> createEmploye(@RequestBody EmployeRequestDTO dto) {
+    public ResponseEntity<Employe> createEmploye(@RequestBody EmployeRequest dto) {
 //        if (dto.getRole() == RoleEmploye.DIRECTEUR) {
 //            throw new IllegalArgumentException("Cannot create a Directeur using this endpoint. Please use /api/agences/with-directeur instead.");
 //        }

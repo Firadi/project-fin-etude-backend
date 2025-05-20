@@ -1,6 +1,6 @@
 package com.project_technique.project_technique.services;
 
-import com.project_technique.project_technique.dto.EmployeRequestDTO;
+import com.project_technique.project_technique.dto.EmployeRequest;
 import com.project_technique.project_technique.exception.EmailAlreadyExistsException;
 import com.project_technique.project_technique.models.AgenceImmobilier;
 import com.project_technique.project_technique.models.Employe;
@@ -38,7 +38,7 @@ public class EmployeService {
         return employeRepo.findById(id);
     }
 
-    public Employe createEmploye(EmployeRequestDTO dto) {
+    public Employe createEmploye(EmployeRequest dto) {
 
         if (userRepo.existsByEmail(dto.getEmail())) {
             throw new EmailAlreadyExistsException("Email already exist");

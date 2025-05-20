@@ -1,6 +1,6 @@
 package com.project_technique.project_technique.controllers;
 
-import com.project_technique.project_technique.dto.CreateAgenceWithDirecteurRequestDTO;
+import com.project_technique.project_technique.dto.CreateAgenceWithDirecteurRequest;
 import com.project_technique.project_technique.models.AgenceImmobilier;
 import com.project_technique.project_technique.services.AgenceImmobilierService;
 import jakarta.validation.Valid;
@@ -34,7 +34,7 @@ public class AgenceImmobilierController {
 //    }
 
     @PostMapping
-    public ResponseEntity<AgenceImmobilier> createAgenceWithDirecteur(@RequestBody @Valid  CreateAgenceWithDirecteurRequestDTO request) {
+    public ResponseEntity<AgenceImmobilier> createAgenceWithDirecteur(@RequestBody @Valid CreateAgenceWithDirecteurRequest request) {
 
         AgenceImmobilier result = agenceImmobilierService.createAgenceWithDirecteur(request);
 
