@@ -5,13 +5,16 @@ import io.jsonwebtoken.security.SignatureException;
 import io.swagger.v3.oas.annotations.Hidden;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-
+import java.time.LocalDateTime;
 
 
 @Hidden
@@ -24,20 +27,44 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body("error:  "+ex.getMessage());
     }
 
-    // Optional: utility method to unwrap the root cause
-    private Throwable getRootCause(Throwable ex) {
-        Throwable cause = ex;
-        while (cause.getCause() != null && cause.getCause() != cause) {
-            cause = cause.getCause();
-        }
-        return cause;
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiError> handleBadCredentialsException(BadCredentialsException ex, HttpServletRequest request){
+
+        System.out.println("handleBadCredentialsException");
+
+        ApiError apiError = new ApiError(
+                request.getRequestURI(),
+                ex.getMessage(),
+                HttpStatus.UNAUTHORIZED.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiError> handleBadRequest(HttpMessageNotReadableException ex, HttpServletRequest request) {
+        ApiError error = new ApiError(
+                request.getRequestURI(),
+                "Malformed JSON request",
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(SignatureException.class)
-    public ResponseEntity<String> handleInvalidJwtSignature(SignatureException ex) {
+    public ResponseEntity<ApiError> handleInvalidJwtSignature(SignatureException ex, HttpServletRequest request) {
 
-        System.out.println("OKKKKKKKKKKKKKKK");
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body("Invalid token");
+        System.out.println("hi");
+
+        ApiError apiError = new ApiError(
+                request.getRequestURI(),
+                ex.getMessage(),
+                HttpStatus.UNAUTHORIZED.value(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
     }
 }

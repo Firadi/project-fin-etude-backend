@@ -1,11 +1,13 @@
 package com.project_technique.project_technique.filter;
 
+import com.project_technique.project_technique.exception.ApiError;
 import com.project_technique.project_technique.services.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -56,9 +59,26 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             chain.doFilter(request, response);
 
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Unauthorized: invalid token");
-        }
+            } catch (Exception e) {
+
+                String uri = request.getRequestURI();
+                String message = e.getMessage();
+                int status = HttpServletResponse.SC_UNAUTHORIZED;
+                String timestamp = java.time.LocalDateTime.now().toString();
+
+            String jsonResponse = String.format(
+                    "{\"path\":\"%s\",\"message\":\"%s\",\"status\":%d,\"timestamp\":\"%s\"}",
+                    escapeJson(uri), escapeJson(message), status, escapeJson(timestamp)
+            );
+
+            response.setStatus(status);
+            response.setContentType("application/json");
+            response.getWriter().write(jsonResponse);
+            }
     }
+
+    private String escapeJson(String str) {
+        return str == null ? "" : str.replace("\\", "\\\\").replace("\"", "\\\"");
+    }
+
 }
