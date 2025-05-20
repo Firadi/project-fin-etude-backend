@@ -1,6 +1,5 @@
 package com.project_technique.project_technique.services;
 
-import com.project_technique.project_technique.annotations.IsDirecteur;
 import com.project_technique.project_technique.dto.EmployeRequest;
 import com.project_technique.project_technique.exception.EmailAlreadyExistsException;
 import com.project_technique.project_technique.models.AgenceImmobilier;
@@ -47,7 +46,7 @@ public class EmployeService {
     }
 
 
-    public Employe createEmploye(EmployeRequest dto) {
+    public Employe createCommercial(EmployeRequest dto) {
 
         if (userRepo.existsByEmail(dto.email())) {
             throw new EmailAlreadyExistsException("Email already exist");
@@ -69,6 +68,19 @@ public class EmployeService {
         // Save
         return employeRepo.save(employe);
     }
+
+    public Employe createDirecteur(EmployeRequest dto, AgenceImmobilier agence){
+        if (userRepo.existsByEmail(dto.email())) {
+            throw new EmailAlreadyExistsException("Email already exist");
+        }
+
+        String encodedPassword = passwordEncoder.encode(dto.password());
+        Employe employe = dto.toEmploye(encodedPassword, agence);
+
+        // Save
+        return employeRepo.save(employe);
+    }
+
 
     public Employe updateEmploye(Long id, Employe updatedEmploye) {
         return employeRepo.findById(id)

@@ -48,11 +48,10 @@ public class AgenceImmobilierService {
                 request.directeurLastName(),
                 request.directeurEmail(),
                 request.directeurPassword(),
-                RoleEmploye.DIRECTEUR,
-                agence.getId()
+                RoleEmploye.DIRECTEUR
         );
 
-        Employe dir = employeService.createEmploye(directeur);
+        Employe dir = employeService.createDirecteur(directeur, agence);
 
         // Step 3: Update Agence with Directeur
         agence.setDirecteur(dir);
