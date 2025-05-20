@@ -1,6 +1,7 @@
 package com.project_technique.project_technique.services;
 
 import com.project_technique.project_technique.dto.EmployeRequestDTO;
+import com.project_technique.project_technique.exception.EmailAlreadyExistsException;
 import com.project_technique.project_technique.models.AgenceImmobilier;
 import com.project_technique.project_technique.models.Employe;
 import com.project_technique.project_technique.models.RoleEmploye;
@@ -40,15 +41,15 @@ public class EmployeService {
     public Employe createEmploye(EmployeRequestDTO dto) {
 
         if (userRepo.existsByEmail(dto.getEmail())) {
-            throw new IllegalArgumentException("Email already exists.");
+            throw new EmailAlreadyExistsException("Email already exist");
         }
-
-        String encodedPassword = passwordEncoder.encode(dto.getPassword());
 
         AgenceImmobilier agence = agenceImmoubilerRepo.findById(dto.getAgenceId())
                 .orElseThrow(() -> new RuntimeException("Agence not found"));
 
-        // Create the Employe manually
+
+        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+
         Employe employe = dto.toEmploye(encodedPassword, agence);
 
 
