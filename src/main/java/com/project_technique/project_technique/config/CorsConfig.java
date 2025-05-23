@@ -14,7 +14,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Allow all paths
-                        .allowedOrigins("*") // Allow your React app
+                        .allowedOriginPatterns("*") // Allow your React app
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow HTTP methods
                         .allowedHeaders("*")
                         .allowCredentials(true);
