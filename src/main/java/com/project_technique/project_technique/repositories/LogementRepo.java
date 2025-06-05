@@ -14,4 +14,5 @@ public interface LogementRepo extends JpaRepository<Logement, Long> {
     // OR if you want to use the employee ID instead
     List<Logement> findByEmployeEmail(String employeEmail);
 
+    List<Logement> findByEmployeId(Long commercialId);
 }

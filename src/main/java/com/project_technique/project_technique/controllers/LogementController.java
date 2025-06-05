@@ -1,5 +1,6 @@
 package com.project_technique.project_technique.controllers;
 
+import com.project_technique.project_technique.annotations.IsDirecteur;
 import com.project_technique.project_technique.dto.LogementRequestDTO;
 import com.project_technique.project_technique.dto.LogementResponseDTO;
 import com.project_technique.project_technique.models.Employe;
@@ -47,10 +48,20 @@ public class LogementController {
     }
 
     @GetMapping("/my-logements")
-    public ResponseEntity<List<LogementResponseDTO>> getLogementsByCommercialId(Authentication authentication) {
+    public ResponseEntity<List<LogementResponseDTO>> getLogementsByCommercialToken(Authentication authentication) {
 
         String commercialEmail = extractCommercialEmail(authentication);
         List<LogementResponseDTO> logements = logementService.findByCommercialEmail(commercialEmail);
+        return ResponseEntity.ok(logements);
+    }
+
+
+    @IsDirecteur
+    @GetMapping("/commercial/{commercialId}")
+    public ResponseEntity<List<LogementResponseDTO>> getLogementsByCommercial(@PathVariable Long commercialId) {
+
+
+        List<LogementResponseDTO> logements = logementService.findByCommercialId(commercialId);
         return ResponseEntity.ok(logements);
     }
 

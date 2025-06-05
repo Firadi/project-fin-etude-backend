@@ -93,4 +93,14 @@ public class LogementService {
                         .toList();
 
     }
+
+    public List<LogementResponseDTO> findByCommercialId(Long commercialId) {
+        List<Logement> logements = logementRepo.findByEmployeId(commercialId);
+
+
+        return logements
+                .stream()
+                .map(LogementResponseDTO::toDTO)
+                .toList();
+    }
 }
