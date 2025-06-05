@@ -3,6 +3,7 @@ package com.project_technique.project_technique.controllers;
 
 import com.project_technique.project_technique.dto.AuthRequest;
 import com.project_technique.project_technique.dto.AuthResponse;
+import com.project_technique.project_technique.security.CustomUserDetails;
 import com.project_technique.project_technique.services.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class AuthController {
         );
 
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(request.username());
+        final CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(request.username());
         final String jwt = jwtUtil.generateToken(userDetails);
         return ResponseEntity.ok(new AuthResponse(jwt));
     }

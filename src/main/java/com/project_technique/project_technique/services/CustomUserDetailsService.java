@@ -1,7 +1,8 @@
-package com.project_technique.project_technique.security;
+package com.project_technique.project_technique.services;
 
 import com.project_technique.project_technique.models.Employe;
 import com.project_technique.project_technique.repositories.EmployeRepo;
+import com.project_technique.project_technique.security.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,10 +25,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         Employe employe = employeRepo.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
-        return new org.springframework.security.core.userdetails.User(
-                employe.getEmail(),
-                employe.getPassword(),
-                List.of(new SimpleGrantedAuthority("ROLE_" + employe.getRole().name()))
-        );
+        return new CustomUserDetails(employe);
     }
 }

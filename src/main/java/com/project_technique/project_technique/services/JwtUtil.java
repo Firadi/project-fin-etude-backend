@@ -1,5 +1,6 @@
 package com.project_technique.project_technique.services;
 
+import com.project_technique.project_technique.security.CustomUserDetails;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -17,16 +18,23 @@ import java.util.stream.Collectors;
 public class JwtUtil {
     private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(CustomUserDetails userDetails) {
 
         List<String> roles = userDetails.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
+
+        String firstName = userDetails.getFirstName();
+        String lastName = userDetails.getLastName();
+        Long id = userDetails.getId();
+
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .claim("role",roles)
+                .claim("firstName",firstName)
+                .claim("lastName", lastName)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
                 .signWith(SECRET_KEY)
