@@ -29,6 +29,7 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthRequest request) {
 
@@ -39,7 +40,9 @@ public class AuthController {
 
         final CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(request.username());
         final String jwt = jwtUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new AuthResponse(jwt));
+        final String role = userDetails.getEmploye().getRole().name();
+
+        return ResponseEntity.ok(new AuthResponse(jwt, role));
     }
 
 }
